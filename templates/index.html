@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Diamond Price Prediction
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVIGATION
+========================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            ◆
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                Diamond Price Prediction
+            </div>
+
+            <div class="brand-sub">
+                Machine Learning Prediction System
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="#predictor"
+        class="nav-btn"
+    >
+        Predict Price
+    </a>
+
+</header>
+
+
+
+<main>
+
+
+<!-- =========================================
+     HERO SECTION
+========================================= -->
+
+<section class="hero">
+
+
+    <div class="hero-content">
+
+        <span class="eyebrow">
+            RANDOM FOREST REGRESSION
+        </span>
+
+
+        <h1>
+
+            Predict a diamond's
+
+            <br>
+
+            <span>
+                market price
+            </span>
+
+            intelligently.
+
+        </h1>
+
+
+        <p>
+
+            Enter physical characteristics
+            and quality grades. The machine
+            learning model estimates the
+            diamond price in US dollars.
+
+        </p>
+
+
+        <a
+            href="#predictor"
+            class="primary-btn"
+        >
+
+            Start Prediction
+
+            <span>
+                →
+            </span>
+
+        </a>
+
+    </div>
+
+
+
+    <div class="hero-card">
+
+
+        <div class="diamond-visual">
+
+            ◆
+
+        </div>
+
+
+        <div class="hero-card-label">
+
+            MODEL STATUS
+
+        </div>
+
+
+        <div class="status">
+
+            <span></span>
+
+            Online & Ready
+
+        </div>
+
+
+        <div class="hero-mini-grid">
+
+
+            <div>
+
+                <strong>
+
+                    {{ metrics['R2']|round(3) }}
+
+                </strong>
+
+                <small>
+                    R² Score
+                </small>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+
+                    {{ metrics['MAE']|round(0) }}
+
+                </strong>
+
+                <small>
+                    MAE (USD)
+                </small>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     STATISTICS
+========================================= -->
+
+<section class="stats">
+
+
+    <div class="stat">
+
+        <strong>
+            {{ metrics['dataset_rows'] }}
+        </strong>
+
+        <span>
+            Dataset Records
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <strong>
+            9
+        </strong>
+
+        <span>
+            Prediction Features
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <strong>
+            200
+        </strong>
+
+        <span>
+            Random Forest Trees
+        </span>
+
+    </div>
+
+
+    <div class="stat">
+
+        <strong>
+            USD
+        </strong>
+
+        <span>
+            Output Currency
+        </span>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =========================================
+     PREDICTION SECTION
+========================================= -->
+
+<section
+    id="predictor"
+    class="predictor-section"
+>
+
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+
+            PREDICTION ENGINE
+
+        </span>
+
+
+        <h2>
+
+            Enter diamond specifications
+
+        </h2>
+
+
+        <p>
+
+            Enter the characteristics of
+            the diamond to estimate its price.
+
+        </p>
+
+    </div>
+
+
+
+    <div class="predictor-layout">
+
+
+        <!-- FORM -->
+
+        <form
+            id="predictionForm"
+            class="form-card"
+        >
+
+
+            <div class="form-grid">
+
+
+                <!-- CARAT -->
+
+                <div class="field">
+
+                    <label>
+                        Carat Weight
+                    </label>
+
+                    <input
+                        name="carat"
+                        type="number"
+                        min="0.20"
+                        max="5.10"
+                        step="0.01"
+                        value="0.70"
+                        required
+                    >
+
+                    <small>
+                        Weight of diamond
+                    </small>
+
+                </div>
+
+
+
+                <!-- CUT -->
+
+                <div class="field">
+
+                    <label>
+                        Cut Quality
+                    </label>
+
+                    <select name="cut">
+
+                        <option>
+                            Ideal
+                        </option>
+
+                        <option>
+                            Premium
+                        </option>
+
+                        <option>
+                            Very Good
+                        </option>
+
+                        <option>
+                            Good
+                        </option>
+
+                        <option>
+                            Fair
+                        </option>
+
+                    </select>
+
+                    <small>
+                        Overall cut quality
+                    </small>
+
+                </div>
+
+
+
+                <!-- COLOR -->
+
+                <div class="field">
+
+                    <label>
+                        Color Grade
+                    </label>
+
+                    <select name="color">
+
+                        <option>D</option>
+
+                        <option>E</option>
+
+                        <option>F</option>
+
+                        <option>G</option>
+
+                        <option>H</option>
+
+                        <option>I</option>
+
+                        <option>J</option>
+
+                    </select>
+
+                    <small>
+                        D is highest grade
+                    </small>
+
+                </div>
+
+
+
+                <!-- CLARITY -->
+
+                <div class="field">
+
+                    <label>
+                        Clarity Grade
+                    </label>
+
+                    <select name="clarity">
+
+                        <option>IF</option>
+
+                        <option>VVS1</option>
+
+                        <option>VVS2</option>
+
+                        <option>VS1</option>
+
+                        <option>VS2</option>
+
+                        <option>SI1</option>
+
+                        <option>SI2</option>
+
+                        <option>I1</option>
+
+                    </select>
+
+                    <small>
+                        Diamond clarity
+                    </small>
+
+                </div>
+
+
+
+                <!-- DEPTH -->
+
+                <div class="field">
+
+                    <label>
+                        Depth (%)
+                    </label>
+
+                    <input
+                        name="depth"
+                        type="number"
+                        min="43"
+                        max="79"
+                        step="0.1"
+                        value="61.8"
+                        required
+                    >
+
+                    <small>
+                        Total depth percentage
+                    </small>
+
+                </div>
+
+
+
+                <!-- TABLE -->
+
+                <div class="field">
+
+                    <label>
+                        Table (%)
+                    </label>
+
+                    <input
+                        name="table"
+                        type="number"
+                        min="43"
+                        max="95"
+                        step="0.1"
+                        value="57"
+                        required
+                    >
+
+                    <small>
+                        Top surface percentage
+                    </small>
+
+                </div>
+
+
+
+                <!-- X -->
+
+                <div class="field">
+
+                    <label>
+                        Length X (mm)
+                    </label>
+
+                    <input
+                        name="x"
+                        type="number"
+                        min="0.01"
+                        max="11"
+                        step="0.01"
+                        value="5.70"
+                        required
+                    >
+
+                    <small>
+                        Length
+                    </small>
+
+                </div>
+
+
+
+                <!-- Y -->
+
+                <div class="field">
+
+                    <label>
+                        Width Y (mm)
+                    </label>
+
+                    <input
+                        name="y"
+                        type="number"
+                        min="0.01"
+                        max="60"
+                        step="0.01"
+                        value="5.71"
+                        required
+                    >
+
+                    <small>
+                        Width
+                    </small>
+
+                </div>
+
+
+
+                <!-- Z -->
+
+                <div class="field">
+
+                    <label>
+                        Depth Z (mm)
+                    </label>
+
+                    <input
+                        name="z"
+                        type="number"
+                        min="0.01"
+                        max="32"
+                        step="0.01"
+                        value="3.53"
+                        required
+                    >
+
+                    <small>
+                        Depth
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+
+            <button
+                type="submit"
+                class="predict-btn"
+                id="predictBtn"
+            >
+
+                <span>
+                    Estimate Diamond Price
+                </span>
+
+                <span>
+                    ◆
+                </span>
+
+            </button>
+
+
+            <div
+                id="errorBox"
+                class="error-box"
+            ></div>
+
+
+        </form>
+
+
+
+        <!-- RESULT -->
+
+        <aside class="result-card">
+
+
+            <div class="result-top">
+
+                <span class="eyebrow">
+
+                    ESTIMATED VALUE
+
+                </span>
+
+
+                <div class="result-icon">
+
+                    ◆
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="price"
+                id="price"
+            >
+
+                $—
+
+            </div>
+
+
+            <p id="resultText">
+
+                Complete the form and run
+                the prediction to see the
+                estimated price.
+
+            </p>
+
+
+            <div class="result-divider"></div>
+
+
+            <div class="result-note">
+
+                <strong>
+                    Important
+                </strong>
+
+                <span>
+
+                    This is a machine learning
+                    estimate based on historical
+                    dataset patterns and is not
+                    a certified diamond appraisal.
+
+                </span>
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     WORKFLOW
+========================================= -->
+
+<section class="method-section">
+
+
+    <div class="section-heading">
+
+        <span class="eyebrow">
+            SYSTEM PIPELINE
+        </span>
+
+        <h2>
+            How the application works
+        </h2>
+
+    </div>
+
+
+
+    <div class="pipeline">
+
+
+        <div>
+
+            <b>01</b>
+
+            <h3>
+                Input
+            </h3>
+
+            <p>
+
+                User enters diamond
+                characteristics through
+                the web interface.
+
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <b>02</b>
+
+            <h3>
+                Encoding
+            </h3>
+
+            <p>
+
+                Quality grades are converted
+                into numerical values.
+
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <b>03</b>
+
+            <h3>
+                Prediction
+            </h3>
+
+            <p>
+
+                Random Forest regression
+                processes the nine features.
+
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <b>04</b>
+
+            <h3>
+                Output
+            </h3>
+
+            <p>
+
+                The predicted diamond price
+                is returned to the interface.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+
+    <div>
+
+        Diamond Price Prediction
+        
+
+    </div>
+
+
+    <div>
+
+        Python · Flask · Scikit-learn
+        · HTML · CSS · JavaScript
+
+    </div>
+
+</footer>
+
+
+
+<script
+    src="{{ url_for('static', filename='js/app.js') }}"
+></script>
+
+
+</body>
+
+</html>
